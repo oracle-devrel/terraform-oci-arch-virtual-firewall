@@ -1,4 +1,4 @@
-## Copyright (c) 2022, Oracle and/or its affiliates. 
+## Copyright (c) 2021, Oracle and/or its affiliates. 
 ## All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
 
 # vm_pan_firewall 
@@ -45,6 +45,7 @@ resource "oci_core_vnic_attachment" "vm_pan_firewall_vcn01pub02vnic_attachment" 
     subnet_id              = oci_core_subnet.vcn01_subnet_untrusted_pub02.id
     display_name           = "vcn01_untrusted_vnic"
     private_ip             = var.vm_pan_firewall_vcn01_priv02_vnic_ip
+    nsg_ids                = [oci_core_network_security_group.UntrustSecurityGroup.id]
     assign_public_ip       = true
     skip_source_dest_check = true
   }
