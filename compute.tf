@@ -45,6 +45,7 @@ resource "oci_core_vnic_attachment" "vm_pan_firewall_vcn01pub02vnic_attachment" 
     subnet_id              = oci_core_subnet.vcn01_subnet_untrusted_pub02.id
     display_name           = "vcn01_untrusted_vnic"
     private_ip             = var.vm_pan_firewall_vcn01_priv02_vnic_ip
+    nsg_ids                = [oci_core_network_security_group.UntrustSecurityGroup.id]
     assign_public_ip       = true
     skip_source_dest_check = true
   }
