@@ -108,7 +108,27 @@ resource "oci_core_route_table" "vcn02_priv04_paloalto_route_table" {
 
 resource "oci_core_security_list" "vcn01_pub02_seclist" {
   compartment_id = var.compartment_ocid
-  display_name   = ""
+  display_name   = "vcn01_pub02_seclist"
+  vcn_id         = oci_core_vcn.vcn01.id
+
+  egress_security_rules {
+    destination = "0.0.0.0/0"
+    protocol    = "6"
+  }
+  ingress_security_rules {
+    tcp_options {
+      max = 22
+      min = 22
+    }
+    protocol = "6"
+    source   = "0.0.0.0/0"
+  }
+  defined_tags = { "${oci_identity_tag_namespace.ArchitectureCenterTagNamespace.name}.${oci_identity_tag.ArchitectureCenterTag.name}" = var.release }
+}
+
+resource "oci_core_security_list" "vcn01_priv03_seclist" {
+  compartment_id = var.compartment_ocid
+  display_name   = "vcn01_priv03_seclist"
   vcn_id         = oci_core_vcn.vcn01.id
 
   egress_security_rules {
@@ -157,6 +177,7 @@ resource "oci_core_subnet" "vcn01_subnet_trusted_priv03" {
   vcn_id                     = oci_core_vcn.vcn01.id
   display_name               = var.vcn01_subnet_trusted_priv03_display_name
   dhcp_options_id            = oci_core_vcn.vcn01.default_dhcp_options_id
+  security_list_ids          = [oci_core_security_list.vcn01_priv03_seclist.id]
   prohibit_public_ip_on_vnic = true
   defined_tags               = { "${oci_identity_tag_namespace.ArchitectureCenterTagNamespace.name}.${oci_identity_tag.ArchitectureCenterTag.name}" = var.release }
 }
